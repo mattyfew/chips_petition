@@ -4,7 +4,7 @@ const context = canvas.getContext('2d')
 const offsetTop = canvas.offsetTop
 const offsetLeft = canvas.offsetLeft
 
-canvas.style.border = '1px solid blue'
+canvas.style.border = '1px dotted blue'
 
 canvas.addEventListener('mousedown', e => {
     context.beginPath()
