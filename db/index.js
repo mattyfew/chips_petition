@@ -24,3 +24,11 @@ exports.getSignerCount = function() {
     return db.query(q)
         .then(results => results.rows[0].count)
 }
+
+exports.getSig = function(sigId) {
+    const q = 'SELECT signature FROM users WHERE id = $1'
+    const params = [ sigId ]
+
+    return db.query(q, params)
+        .then(results => results.rows[0].signature)
+}
