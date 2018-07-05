@@ -2,7 +2,7 @@ const spicedPg = require('spiced-pg')
 const db = spicedPg('postgres:mattfewer:postgres@localhost:5432/petition')
 
 exports.getSigners = function() {
-    const q = 'SELECT * FROM signers'
+    const q = 'SELECT * FROM users'
 
     return db.query(q).then(results => results.rows)
 }
