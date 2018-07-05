@@ -1,4 +1,39 @@
 body {
     background-color: #20bf6b;
     font-family: 'Open Sans', sans-serif;
+    margin: 0;
+}
+
+nav {
+    background-color: #3867d6;
+    padding: 24px 5%;
+}
+nav ul {
+    margin: 0;
+    display: flex;
+    list-style-type: none;
+}
+nav li {
+    margin-right: 24px;
+}
+
+
+#submit-signer-form {
+    text-align: center
+
+}
+
+#submit-signer-form input {
+    min-width: 70%;
+    display: block;
+    margin: 0 auto;
+    padding: 24px 16px;
+    margin-bottom: 16px;
+}
+#submit-signer-form button {
+    display: block;
+    margin: 0 auto;
+    padding: 24px 16px;
+    font-size: 16px;
+    width: 74%;
 }

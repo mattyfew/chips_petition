@@ -28,7 +28,6 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(express.static('public'))
 
 app.use(csurf())
-
 app.use(function(req, res, next) {
     res.locals.csrfToken = req.csrfToken()
     next()
@@ -53,11 +52,11 @@ function checkForNoSig(req, res, next) {
 }
 
 
-app.get('/', (req, res) => {
+app.get('/', checkForNoSig, (req, res) => {
     res.render('sign')
 })
 
-app.post('/submit-signer', checkForNoSig, (req, res) => {
+app.post('/submit-signer', (req, res) => {
     const { firstname, lastname, signature } = req.body
 
     db.insertNewSigner(firstname, lastname, signature)
@@ -85,7 +84,7 @@ app.get('/thanks', checkForSig, (req, res) => {
     })
 })
 
-app.get('/signers', (req, res) => {
+app.get('/signers', checkForSig, (req, res) => {
     db.getSigners()
         .then(signers => {
             res.render('signers', { signers })
