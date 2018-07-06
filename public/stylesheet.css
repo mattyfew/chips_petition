@@ -18,19 +18,18 @@ nav li {
 }
 
 
-#submit-signer-form {
+form {
     text-align: center
-
 }
 
-#submit-signer-form input {
+form input {
     min-width: 70%;
     display: block;
     margin: 0 auto;
     padding: 24px 16px;
     margin-bottom: 16px;
 }
-#submit-signer-form button {
+form button {
     display: block;
     margin: 0 auto;
     padding: 24px 16px;

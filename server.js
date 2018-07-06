@@ -51,11 +51,43 @@ function checkForNoSig(req, res, next) {
     }
 }
 
+function checkForLogin(req, res, next) {
+    if (!req.session.user.id) {
+        res.redirect('/')
+    } else {
+        next()
+    }
+}
+
 
 app.get('/', checkForNoSig, (req, res) => {
-    res.render('sign')
+    res.render('registration')
 })
 
+app.post('/registration', (req, res) => {
+    const { firstname, lastname, email, password } = req.body
+
+    db.registerNewUser(firstname, lastname, email, password)
+        .then(id => {
+            req.session.user = {
+                id, firstname, lastname, email
+            }
+            console.log("so far so good", req.session);
+            res.redirect('/sign')
+        })
+})
+
+app.get('/login', checkForLogin, (req, res) => {
+    res.render('login',)
+})
+
+app.post('/login', (req, res) => {
+
+})
+
+app.get('/sign', checkForNoSig, (req, res) => {
+    res.render('sign')
+})
 app.post('/submit-signer', (req, res) => {
     const { firstname, lastname, signature } = req.body
 
