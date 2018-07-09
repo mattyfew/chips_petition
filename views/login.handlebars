@@ -1,8 +1,14 @@
 <div id="login">
+    {{#if error}}
+        <p>Something went wrong, please try again</p>
+    {{/if}}
+
     <form action="/login" method="post">
         <input type="text" name="email" placeholder="email"  />
         <input type="password" name="password" placeholder="password" />
         <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
         <button type="submit">Submit</button>
     </form>
+
+    <a href="/login">Don't have an account? Sign up!</a
 </div>

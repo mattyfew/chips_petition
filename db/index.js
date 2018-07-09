@@ -5,7 +5,9 @@ const bcrypt = require('bcryptjs')
 exports.getSigners = function() {
     const q = 'SELECT * FROM users'
 
-    return db.query(q).then(results => results.rows)
+    return db.query(q)
+        .then(results => results.rows)
+        .catch(e => console.log("There was an error in getSigners", e))
 }
 
 exports.insertNewSigner = function(firstName, lastName, sig) {
@@ -16,7 +18,9 @@ exports.insertNewSigner = function(firstName, lastName, sig) {
     `
     const params = [ firstName, lastName, sig ]
 
-    return db.query(q, params).then(results => results.rows[0])
+    return db.query(q, params)
+        .then(results => results.rows[0])
+        .catch(e => console.log("There was an error in insertNewSigner", e))
 }
 
 exports.getSignerCount = function() {
@@ -24,6 +28,8 @@ exports.getSignerCount = function() {
 
     return db.query(q)
         .then(results => results.rows[0].count)
+        .catch(e => console.log("There was an error in getSignerCount", e))
+
 }
 
 exports.getSig = function(sigId) {
@@ -32,9 +38,22 @@ exports.getSig = function(sigId) {
 
     return db.query(q, params)
         .then(results => results.rows[0].signature)
+        .catch(e => console.log("There was an error in getSig", e))
 }
 
 exports.login = function() {}
+
+exports.checkForEmail = function(email) {
+    const q = 'SELECT * FROM users WHERE email = $1'
+    const params = [ email ]
+
+    return db.query(q, params)
+        .then(results => {
+            return results.rows[0]
+                ? results.rows[0]
+                : false
+        })
+}
 
 exports.registerNewUser = function(firstName, lastName, email, password) {
     return hashPassword(password)
@@ -47,15 +66,26 @@ exports.registerNewUser = function(firstName, lastName, email, password) {
             const params = [ firstName, lastName, email, hash ]
 
             return db.query(q, params)
-                .then(results => {
-                    console.log(results.rows);
-                    return Promise.resolve(results.rows[0].id)
-                })
+                .then(results => Promise.resolve(results.rows[0].id))
         })
-        .catch(e => {
-            console.log("There was an error in registerNewUser", e)
-        })
+        .catch(e => console.log("There was an error in registerNewUser", e))
 }
+
+exports.insertProfileInfo = function(userId, age, city, url) {
+    const q = `
+        INSERT INTO user_profiles (user_id, age, city, url)
+            VALUES ($1, $2, $3, $4)
+            RETURNING *
+    `
+    const params = [ userId, age || null, city || null, url || null ]
+
+    console.log(params);
+
+    return db.query(q, params)
+        .then(results => results.rows[0])
+}
+
+// ============= BCRYPT ================
 
 function hashPassword(plainTextPassword) {
     return new Promise(function(resolve, reject) {
