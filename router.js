@@ -108,6 +108,24 @@ router.get('/profile/edit', checkForLogin, (req, res) => {
         })
 })
 
+router.post('/profile/edit', checkForLogin, (req, res) => {
+    const { firstname, lastname, password, age, city, url } = req.body
+
+    if (password) {
+        // change password
+        console.log("they want to change their password");
+        db.hashPassword(password)
+
+    } else {
+        // skip password stuff
+        console.log("no password change");
+
+    }
+})
+
+
+
+
 router.get('/sign', checkForLogin, checkForNoSig, (req, res) => {
     res.render('sign')
 })
@@ -145,5 +163,13 @@ router.get('/signers', checkForLogin, checkForSig, (req, res) => {
         })
 })
 
+router.get('/signers/:city', (req, res) => {
+    db.getSignersByCity(req.params.city)
+    // db.getSignersByCity(req.params.city.toLowerCase())
+        .then(signers => {
+            console.log(signers);
+            res.render('city', { signers })
+        })
+})
 
 module.exports = router

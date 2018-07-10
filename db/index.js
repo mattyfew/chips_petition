@@ -3,11 +3,37 @@ const db = spicedPg('postgres:mattfewer:postgres@localhost:5432/petition')
 const bcrypt = require('bcryptjs')
 
 exports.getSigners = function() {
-    const q = 'SELECT * FROM users'
+    const q = `
+        SELECT users.first_name, users.last_name, user_profiles.age, user_profiles.city, user_profiles.url
+        FROM users
+        JOIN user_profiles
+            ON users.id = user_profiles.user_id
+        JOIN signatures
+            ON user_profiles.user_id = signatures.user_id
+        WHERE signatures.id IS NOT NULL;
+    `
 
     return db.query(q)
         .then(results => results.rows)
         .catch(e => console.log("There was an error in getSigners", e))
+}
+
+exports.getSignersByCity = function(city) {
+    const q = `
+        SELECT users.first_name, users.last_name, user_profiles.age, user_profiles.city, user_profiles.url
+        FROM users
+        JOIN user_profiles
+            ON users.id = user_profiles.user_id
+        JOIN signatures
+            ON user_profiles.user_id = signatures.user_id
+        WHERE signatures.id IS NOT NULL
+        AND city = $1;
+    `
+    const params = [ city]
+
+    return db.query(q, params)
+        .then(results => results.rows)
+        .catch(e => console.log("There was an error in getSignersByCity", e))
 }
 
 exports.insertNewSigner = function(userId, sig) {
@@ -65,7 +91,7 @@ exports.checkForEmail = function(email) {
 }
 
 exports.registerNewUser = function(firstName, lastName, email, password) {
-    return hashPassword(password)
+    return exports.hashPassword(password)
         .then(hash => {
             const q = `
                 INSERT INTO users (first_name, last_name, email, password)
@@ -107,7 +133,7 @@ exports.getProfileInfo = function(userId) {
 
 // ============= BCRYPT ================
 
-function hashPassword(plainTextPassword) {
+exports.hashPassword = function(plainTextPassword) {
     return new Promise(function(resolve, reject) {
         bcrypt.genSalt(function(err, salt) {
             if (err) {
