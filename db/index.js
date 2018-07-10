@@ -88,7 +88,18 @@ exports.insertProfileInfo = function(userId, age, city, url) {
     `
     const params = [ userId, age || null, city || null, url || null ]
 
-    console.log(params);
+    return db.query(q, params)
+        .then(results => results.rows[0])
+}
+
+exports.getProfileInfo = function(userId) {
+    const q = `
+        SELECT * FROM users
+        JOIN user_profiles
+            ON users.id = user_profiles.user_id
+        WHERE users.id = $1
+    `
+    const params = [ userId ]
 
     return db.query(q, params)
         .then(results => results.rows[0])

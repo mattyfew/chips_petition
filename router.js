@@ -101,6 +101,13 @@ router.post('/profile', (req, res) => {
         })
 })
 
+router.get('/profile/edit', checkForLogin, (req, res) => {
+    db.getProfileInfo(req.session.user.id)
+        .then(userInfo => {
+            res.render('edit', { userInfo })
+        })
+})
+
 router.get('/sign', checkForLogin, checkForNoSig, (req, res) => {
     res.render('sign')
 })
