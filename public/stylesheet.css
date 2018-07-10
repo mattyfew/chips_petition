@@ -7,6 +7,8 @@ body {
 nav {
     background-color: #3867d6;
     padding: 24px 5%;
+    display: grid;
+    grid-template-columns: 8fr 1fr
 }
 nav ul {
     margin: 0;
@@ -15,6 +17,18 @@ nav ul {
 }
 nav li {
     margin-right: 24px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+}
+a:hover {
+    color: #BFCE3F
+}
+
+#left-side-nav {
+
 }
 
 
@@ -37,9 +51,20 @@ form button {
     width: 74%;
 }
 
+#main-denns-logo, #main-chips-logo {
+    max-width: 300px;
+    max-height: 300px;
+}
+
 
 /* SIGNERS */
 
 #signers-container {
+    text-align: center;
+}
+
+
+/* HELPERS */
+.center {
     text-align: center;
 }
