@@ -38,6 +38,9 @@ function checkForNoLogin(req, res, next) {
 
 
 
+// ============= ROUTES ================
+
+
 router.get('/', checkForNoLogin, (req, res) => {
     res.render('registration')
 })
@@ -60,12 +63,26 @@ router.get('/login', checkForNoLogin, (req, res) => {
 
 router.post('/login', (req, res) => {
     db.checkForEmail(req.body.email)
-        .then(result => {
-            if (result) {
-                db.loginUser(result)
-                    .then(() => {})
+        .then(userInfo => {
+            if (userInfo) {
+                db.checkPassword(req.body.password, userInfo.password)
+                    .then(match => {
+                        if (match) {
+                            req.session.user = {
+                                id: userInfo.id,
+                                email: userInfo.email,
+                                firstName: userInfo.first_name,
+                                lastName: userInfo.last_name
+                            }
+                            res.redirect('/sign')
+                        } else {
+                            res.render('login', {
+                                error: "passwords did not match"
+                            })
+                        }
+                    })
             } else {
-                res.render('login', { error: true })
+                res.render('login', { error: "That email does not exist" })
             }
         })
 })
@@ -89,9 +106,7 @@ router.get('/sign', checkForLogin, checkForNoSig, (req, res) => {
 })
 
 router.post('/submit-signer', (req, res) => {
-    const { firstname, lastname, signature } = req.body
-
-    db.insertNewSigner(firstname, lastname, signature)
+    db.insertNewSigner(req.session.user.id, req.body.signature)
         .then(userInfo => {
             req.session = {
                 signatureId: userInfo.id,
@@ -106,7 +121,7 @@ router.post('/submit-signer', (req, res) => {
         })
 })
 
-router.get('/thanks', checkForSig, (req, res) => {
+router.get('/thanks', checkForLogin, checkForSig, (req, res) => {
     Promise.all([
         db.getSignerCount(),
         db.getSig(req.session.signatureId)
@@ -116,7 +131,7 @@ router.get('/thanks', checkForSig, (req, res) => {
     })
 })
 
-router.get('/signers', checkForSig, (req, res) => {
+router.get('/signers', checkForLogin, checkForSig, (req, res) => {
     db.getSigners()
         .then(signers => {
             res.render('signers', { signers })

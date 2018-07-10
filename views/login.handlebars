@@ -1,6 +1,6 @@
 <div id="login">
     {{#if error}}
-        <p>Something went wrong, please try again</p>
+        <p>{{ error }}</p>
     {{/if}}
 
     <form action="/login" method="post">
@@ -10,5 +10,5 @@
         <button type="submit">Submit</button>
     </form>
 
-    <a href="/login">Don't have an account? Sign up!</a
+    <a href="/login">Don't have an account? Sign up!</a>
 </div>

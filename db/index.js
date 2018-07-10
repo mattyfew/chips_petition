@@ -10,13 +10,13 @@ exports.getSigners = function() {
         .catch(e => console.log("There was an error in getSigners", e))
 }
 
-exports.insertNewSigner = function(firstName, lastName, sig) {
+exports.insertNewSigner = function(userId, sig) {
     const q = `
-        INSERT INTO users (first_name, last_name, signature)
-            VALUES ($1, $2, $3)
+        INSERT INTO signatures (user_id, signature)
+            VALUES ($1, $2)
             RETURNING *
     `
-    const params = [ firstName, lastName, sig ]
+    const params = [ userId, sig ]
 
     return db.query(q, params)
         .then(results => results.rows[0])
@@ -33,7 +33,7 @@ exports.getSignerCount = function() {
 }
 
 exports.getSig = function(sigId) {
-    const q = 'SELECT signature FROM users WHERE id = $1'
+    const q = 'SELECT signature FROM signatures WHERE id = $1'
     const params = [ sigId ]
 
     return db.query(q, params)
@@ -41,7 +41,16 @@ exports.getSig = function(sigId) {
         .catch(e => console.log("There was an error in getSig", e))
 }
 
-exports.login = function() {}
+exports.login = function(userInfo, plainTextPassword) {
+    checkPassword(plainTextPassword, userInfo.password)
+        .then(match => {
+            console.log(match);
+
+            if (match) {
+
+            }
+        })
+}
 
 exports.checkForEmail = function(email) {
     const q = 'SELECT * FROM users WHERE email = $1'
@@ -103,7 +112,7 @@ function hashPassword(plainTextPassword) {
     })
 }
 
-function checkPassword(textEnteredInLoginForm, hashedPasswordFromDatabase) {
+exports.checkPassword = function(textEnteredInLoginForm, hashedPasswordFromDatabase) {
     return new Promise(function(resolve, reject) {
         bcrypt.compare(textEnteredInLoginForm, hashedPasswordFromDatabase, function(err, doesMatch) {
             if (err) {
