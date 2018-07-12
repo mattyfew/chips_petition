@@ -1,10 +1,11 @@
-<h1>Thanks</h1>
 
-<h2>Thank you for signing our chips petition</h2>
+<div class="content-container">
+    <h1>Thank you for signing our chips petition</h1>
 
-<img src="{{ sig }}" alt="">
-<p><a href="/signers">View the other {{ count }} signers</a></p>
-<form action="/delete-sig" method="post">
-    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-    <button id="sig-delete-button" type="submit">Delete Signature</button>
-</form>
+    <img src="{{ sig }}" alt="">
+    <p><a href="/signers">View the other {{ count }} signers</a></p>
+    <form action="/delete-sig" method="post">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+        <button id="sig-delete-button" type="submit">Delete Signature</button>
+    </form>
+</div>

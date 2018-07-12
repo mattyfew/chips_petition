@@ -135,9 +135,6 @@ router.post('/profile/edit', checkForLogin, (req, res) => {
     }
 })
 
-
-
-
 router.get('/sign', checkForLogin, checkForNoSig, (req, res) => {
     res.render('sign')
 })
