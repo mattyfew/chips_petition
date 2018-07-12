@@ -42,7 +42,9 @@ function checkForNoLogin(req, res, next) {
 
 
 router.get('/', checkForNoLogin, (req, res) => {
-    res.render('registration')
+    res.render('registration', {
+        notLoggedIn: true
+    })
 })
 
 router.post('/registration', (req, res) => {
@@ -58,7 +60,9 @@ router.post('/registration', (req, res) => {
 })
 
 router.get('/login', checkForNoLogin, (req, res) => {
-    res.render('login')
+    res.render('login', {
+        notLoggedIn: true
+    })
 })
 
 router.post('/login', (req, res) => {

@@ -1,10 +1,19 @@
 <nav>
     <ul id="left-side-nav">
-        <li><a href="/profile/edit">Edit Profile</a></li>
-        <li><a href="/signers">Signers</a></li>
+        {{#if notLoggedIn}}
+
+        {{else}}
+            <li><a href="/profile/edit">Edit Profile</a></li>
+            <li><a href="/signers">Signers</a></li>
+        {{/if}}
     </ul>
 
     <ul id="right-side-nav">
-        <li><a href="/logout">Logout</a></li>
+        {{#if notLoggedIn}}
+            <li><a href="/">Register</a></li>
+            <li><a href="/login">Login</a></li>
+        {{else}}
+            <li><a href="/logout">Logout</a></li>
+        {{/if}}
     </ul>
 </nav>
