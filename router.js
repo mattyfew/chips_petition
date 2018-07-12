@@ -176,4 +176,13 @@ router.get('/signers/:city', (req, res) => {
         })
 })
 
+router.post('/delete-sig', (req, res) => {
+    console.log("about to delete sig", req.session.signatureId)
+    db.deleteSig(req.session.signatureId)
+        .then(() => {
+            delete req.session.signatureId 
+            res.redirect('/sign')
+        })
+})
+
 module.exports = router

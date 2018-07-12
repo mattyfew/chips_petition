@@ -131,6 +131,15 @@ exports.getProfileInfo = function(userId) {
         .then(results => results.rows[0])
 }
 
+exports.deleteSig = function(sigId){
+    const q = `
+        DELETE FROM signatures WHERE id = $1
+    `
+    const params = [ sigId ]
+
+    return db.query(q, params)
+}
+
 // ============= BCRYPT ================
 
 exports.hashPassword = function(plainTextPassword) {

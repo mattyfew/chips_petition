@@ -8,7 +8,7 @@ canvas.style.border = '1px dotted blue'
 
 canvas.addEventListener('mousedown', e => {
     context.beginPath()
-    context.moveTo(e.clientX - offsetLeft, e.clientY - offsetTop);
+    context.moveTo(e.pageX - offsetLeft, e.pageY - offsetTop);
 
     canvas.addEventListener('mousemove', move)
     canvas.addEventListener('mouseup', up)
@@ -20,7 +20,7 @@ canvas.addEventListener('mousedown', e => {
     }
 
     function move(e) {
-        context.lineTo(e.clientX  - offsetLeft, e.clientY  - offsetTop);
+        context.lineTo(e.pageX  - offsetLeft, e.pageY  - offsetTop);
         context.stroke()
     }
 })
