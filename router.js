@@ -163,6 +163,7 @@ router.get('/thanks', checkForLogin, checkForSig, (req, res) => {
 router.get('/signers', checkForLogin, checkForSig, (req, res) => {
     db.getSigners()
         .then(signers => {
+            console.log(signers);
             res.render('signers', { signers })
         })
 })
@@ -180,7 +181,7 @@ router.post('/delete-sig', (req, res) => {
     console.log("about to delete sig", req.session.signatureId)
     db.deleteSig(req.session.signatureId)
         .then(() => {
-            delete req.session.signatureId 
+            delete req.session.signatureId
             res.redirect('/sign')
         })
 })

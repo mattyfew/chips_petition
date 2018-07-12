@@ -4,12 +4,12 @@ const bcrypt = require('bcryptjs')
 
 exports.getSigners = function() {
     const q = `
-        SELECT users.first_name, users.last_name, user_profiles.age, user_profiles.city, user_profiles.url
+        SELECT users.first_name, users.last_name, user_profiles.age, user_profiles.city, user_profiles.url, signatures.user_id
         FROM users
-        JOIN user_profiles
+        FULL OUTER JOIN user_profiles
             ON users.id = user_profiles.user_id
         JOIN signatures
-            ON user_profiles.user_id = signatures.user_id
+            ON users.id = signatures.user_id
         WHERE signatures.id IS NOT NULL;
     `
 
