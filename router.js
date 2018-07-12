@@ -78,7 +78,15 @@ router.post('/login', (req, res) => {
                                 firstName: userInfo.first_name,
                                 lastName: userInfo.last_name
                             }
-                            res.redirect('/sign')
+                            db.checkForSigId(req.session.user.id)
+                            .then(sigId => {
+                                if (sigId) {
+                                    req.session.signatureId = sigId
+                                    res.redirect('/thanks')
+                                } else {
+                                    res.redirect('/sign')
+                                }
+                            })
                         } else {
                             res.render('login', {
                                 error: "passwords did not match"
@@ -184,6 +192,11 @@ router.post('/delete-sig', (req, res) => {
             delete req.session.signatureId
             res.redirect('/sign')
         })
+})
+
+router.get('/logout', (req, res) => {
+    req.session = null
+    res.redirect('/')
 })
 
 module.exports = router

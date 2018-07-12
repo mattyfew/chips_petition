@@ -131,6 +131,14 @@ exports.getProfileInfo = function(userId) {
         .then(results => results.rows[0])
 }
 
+exports.checkForSigId = function(userId) {
+    const q = `SELECT id FROM signatures WHERE user_id = $1`
+    const params = [ userId ]
+
+    return db.query(q, params)
+        .then(results => results.rows[0] && results.rows[0].id)
+}
+
 exports.deleteSig = function(sigId){
     const q = `
         DELETE FROM signatures WHERE id = $1

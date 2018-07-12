@@ -6,5 +6,5 @@
 <p><a href="/signers">View the other {{ count }} signers</a></p>
 <form action="/delete-sig" method="post">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-    <button type="submit">Delete Signature</button>
+    <button id="sig-delete-button" type="submit">Delete Signature</button>
 </form>
